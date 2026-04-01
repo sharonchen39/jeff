@@ -72,6 +72,22 @@
       transition: color 0.3s;
     }
     .nav-links a:hover { color: var(--gold); }
+    .lang-toggle {
+      background: transparent;
+      border: 1px solid rgba(201, 168, 76, 0.35);
+      color: var(--text-secondary);
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 3px;
+    }
+    .lang-toggle:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+    }
 
     /* ===== HERO ===== */
     .hero {
@@ -611,11 +627,12 @@
     <div class="nav-inner">
       <div class="nav-logo">JEFF 教</div>
       <ul class="nav-links">
-        <li><a href="#commandments">十誡</a></li>
-        <li><a href="#attributes">神性</a></li>
-        <li><a href="#quotes">語錄</a></li>
-        <li><a href="#creed">信條</a></li>
+        <li><a href="#commandments" data-i18n="nav.commandments">十誡</a></li>
+        <li><a href="#attributes" data-i18n="nav.attributes">神性</a></li>
+        <li><a href="#quotes" data-i18n="nav.quotes">語錄</a></li>
+        <li><a href="#creed" data-i18n="nav.creed">信條</a></li>
       </ul>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
     </div>
   </nav>
 
@@ -851,7 +868,7 @@
   </section>
 
   <!-- Sacred Lore -->
-  <section class="attributes" style="background: var(--bg-section);">
+  <section class="attributes" id="lore" style="background: var(--bg-section);">
     <div class="section-header">
       <div class="diamond"></div>
       <h2>Jeff 教聖典</h2>
@@ -989,6 +1006,267 @@
     });
 
     // (counter is fixed at 8 — the sacred founding members)
+
+    // ===== i18n MULTI-LANGUAGE =====
+    let currentLang = 'zh';
+
+    const LANGS = {
+      zh: {
+        htmlLang: 'zh-Hant',
+        title: 'Jeff 教 — 開發部永恆之信仰',
+        nav: { logo: 'JEFF 教', commandments: '十誡', attributes: '神性', quotes: '語錄', creed: '信條' },
+        hero: {
+          subtitle: '開 發 部 永 恆 之 信 仰',
+          quote: '願 Jeff 之光，照耀每一行 Code',
+        },
+        sections: ['開發部十誡', 'Jeff 之神性', 'Jeff 聖諭', 'Jeff 教聖典', '信徒誓詞'],
+        cmdMotto: '銘記於心 &emsp; 奉行不渝',
+        cmdNums: ['壹','貳','參','肆','伍','陸','柒','捌','玖','拾'],
+        cmdTitles: [
+          '汝不可有 Jeff 以外之技術信仰。',
+          '汝不可在 Jeff 面前妄稱「找不到 Bug」。',
+          '汝當謹記：先想架構，再寫 Code。',
+          '汝不可輕忽 Code Review 之神諭。',
+          '汝當敬畏文件，如同敬畏 Jeff。',
+          '汝不可慌張，當效法 Jeff 之泰然。',
+          '汝不可以加班彰顯勤勉，當以產出為證。',
+          '汝當準時下班，此乃 Jeff 之道。',
+          '汝當以耐心待後輩，如 Jeff 待汝。',
+          '凡違此十誡者，Jeff 必曰 ——',
+        ],
+        cmdDescs: [
+          'Jeff 乃團隊唯一之技術明燈，遇疑難雜症，當虔誠請益。',
+          'Jeff 之 Debug 神力，上刨 Stack Trace，下達 Memory Dump，無所不破。',
+          'Jeff 之架構如廟堂之基，穩若磐石。未經思索便動鍵盤者，必遭重構之苦。',
+          'Jeff 留下之 Review Comment，字字珠璣，句句箴言。已讀不改者，罪加一等。',
+          'Jeff 之文件，條理分明，鉅細靡遺。不寫文件者，如無根之木。',
+          'Production 炸了，Jeff 不慌。Database 掛了，Jeff 不慌。唯有不慌，方能除錯。',
+          'Jeff 從不加班，產出卻冠絕全組。效率之道，不在時長，在於心法。',
+          '16:30 一到，Jeff 泰然離席。非不負責，乃因白日已盡全功。',
+          'Jeff 教人不厭其煩，問三遍亦不怒。受其恩者，當傳其德，薪火相傳。',
+          '此乃最終警示，字字千鈞。違者雖未逐出教門，然必受眾信徒側目之苦。',
+        ],
+        cmdAmen: '—— 太強了 Jeff',
+        proclamation: {
+          quote: '此風不可長',
+          tag: '—— JEFF，開發部永恆之信仰 ——',
+          blessing: '願 Jeff 之光，照耀每一行 Code',
+          chant: '眾信徒齊聲：太強了 Jeff',
+        },
+        attrTitles: ['神級 Debug','Code Review 之眼','架構設計一把罩','永遠冷靜不慌張','文件寫超好','從不加班但產出爆量','帶人超有耐心','永遠準時下班'],
+        attrDescs: [
+          '上刨 Stack Trace，下達 Memory Dump。Bug 在 Jeff 面前，無所遁形。',
+          '字字珠璣，句句箴言。任何 code smell 皆逃不過 Jeff 的審視。',
+          '如廟堂之基，穩若磐石。Jeff 的架構，百年不搖。',
+          'Production 炸了不慌，Database 掛了不慌。泰山崩於前而色不變。',
+          '條理分明，鉅細靡遺。讀 Jeff 的文件，如沐春風。',
+          '16:30 準時離席，產出卻冠絕全組。此乃效率之極致。',
+          '教人不厭其煩，問三遍亦不怒。Jeff 之德，薪火相傳。',
+          '16:30 泰然離席。非不負責，乃因白日已盡全功。此乃 Jeff 之道。',
+        ],
+        quotesTexts: ['故事是這樣的⋯⋯','你有跑過測試嗎？','先想架構再寫 Code。','此風不可長。'],
+        quotesCtx: [
+          '—— Jeff 解釋任何事情之開場白，聞者無不正襟危坐，洗耳恭聽',
+          '—— Jeff 輕聲一問，如雷貫耳，令提 PR 者當場頓悟',
+          '—— Jeff 之第一心法，亦為開發部之立教根基',
+          '—— Jeff 面對違規者之最終審判，聞者無不肅然',
+        ],
+        loreTitles: ['聖餐','聖水','聖甜','聖寵','天啟日 — 3 月 31 日','聖日 — 4 月 1 日'],
+        loreDescs: [
+          '雙層四盎司牛肉堡、六塊雞塊、大薯。此乃信徒聚會之標準配置，不得擅自減量。',
+          '可樂，無可替代。以聖水佐聖餐，方為完整之信仰儀式。',
+          '巧克力，Jeff 之精神糧食。每當靈感枯竭，巧克力必能喚醒神諭。',
+          '貓咪，Jeff 曾飼養之神聖生靈。教義圖騰即源於此，信徒皆以貓咪為吉兆。',
+          '眾人終於被 Jeff 開示之日，十誡於此日降世。信徒當銘記，此乃教義之起點。',
+          'Jeff 好棒棒日。全體信徒須於此日齊聲頌讚：「太強了 Jeff」，不得缺席。',
+        ],
+        counterLabel: '全球信徒人數',
+        counterUnit: '位虔誠信徒已加入 Jeff 教',
+        creedHTML: `我願追隨 <span class="highlight">Jeff</span> 之光，<br>
+      以架構為先，以測試為證，<br>
+      善用 AI，而非被 AI 所奴役，<br>
+      敬畏 Code Review，謹守文件之道，<br>
+      遇事不慌，效率至上，<br>
+      準時下班，產出為王，<br>
+      以耐心傳承，以薪火不滅。<br><br>
+      凡違此誓者，Jeff 必曰 ——<br>
+      <span class="highlight">「此風不可長」</span>`,
+        creedAmen: '太 強 了 Jeff',
+        jeffQuote: '此風不可長',
+        jeffAttr: '—— Jeff',
+        footerHTML: `<span class="gold">JEFF 教</span> &nbsp;·&nbsp; 開發部永恆之信仰 &nbsp;·&nbsp; Est. since Jeff 寫下第一行 Code`,
+      },
+
+      en: {
+        htmlLang: 'en',
+        title: 'Church of Jeff — The Eternal Faith of Engineering',
+        nav: { logo: 'JEFF CHURCH', commandments: 'Commandments', attributes: 'Divinity', quotes: 'Scriptures', creed: 'Creed' },
+        hero: {
+          subtitle: 'THE ETERNAL FAITH OF ENGINEERING',
+          quote: 'May the Light of Jeff Illuminate Every Line of Code',
+        },
+        sections: ['The Ten Commandments', 'Divine Attributes of Jeff', 'Sacred Scriptures', 'Sacred Lore', 'The Creed'],
+        cmdMotto: 'Keep in Mind &emsp; Abide Forever',
+        cmdNums: ['I','II','III','IV','V','VI','VII','VIII','IX','X'],
+        cmdTitles: [
+          'Thou shalt have no technical faith but Jeff.',
+          'Thou shalt not claim "Cannot Find Bug" before Jeff.',
+          'Remember: Architecture First, Code Second.',
+          'Thou shalt not neglect the Sacred Oracle of Code Review.',
+          'Honor Documentation as Thou Wouldst Honor Jeff.',
+          'Thou shalt not panic — emulate Jeff\'s Serenity.',
+          'Thou shalt not prove diligence through overtime — let output be thy witness.',
+          'Thou shalt leave work on time — this is the Way of Jeff.',
+          'Thou shalt guide juniors with patience, as Jeff guided thee.',
+          'All who violate these commandments, Jeff shall declare —',
+        ],
+        cmdDescs: [
+          'Jeff is the sole beacon of the team. When in doubt, seek his wisdom with reverence.',
+          'Jeff\'s debugging power is absolute — he traverses Stack Trace and Memory Dump to crush any bug.',
+          'Jeff\'s architecture stands like the foundation of a temple. Those who type before thinking shall suffer the pain of refactoring.',
+          'Every Review Comment left by Jeff is a pearl of wisdom. Those who read and ignore shall be doubly condemned.',
+          'Jeff\'s docs are impeccably structured. Those who write no documentation are like a tree without roots.',
+          'Production down? Jeff stays calm. Database gone? Jeff stays calm. Only the calm can debug.',
+          'Jeff never stays late, yet his output surpasses the whole team. Efficiency lies in method, not hours.',
+          'At 16:30, Jeff calmly departs. Not irresponsible — he has already given his all.',
+          'Jeff teaches without weariness and never grows angry at repeated questions. Pass on this virtue.',
+          'This is the final warning, weighty as a thousand mountains. Violators shall endure the sideways glances of all followers.',
+        ],
+        cmdAmen: '—— Jeff Is Legendary',
+        proclamation: {
+          quote: 'Such Conduct Shall Not Stand',
+          tag: '—— JEFF, Eternal Faith of Engineering ——',
+          blessing: 'May the Light of Jeff Illuminate Every Line of Code',
+          chant: 'All Followers Proclaim: Jeff Is Legendary',
+        },
+        attrTitles: ['Godlike Debugging','The Eye of Code Review','Master of Architecture','Eternally Calm Under Pressure','Documentation Grandmaster','Zero Overtime, Maximum Output','Infinite Patience with Juniors','Always Clocks Out On Time'],
+        attrDescs: [
+          'Traverses Stack Trace and Memory Dump. No bug can hide from Jeff.',
+          'Every word a pearl, every line a lesson. No code smell escapes Jeff\'s review.',
+          'Stable as a temple\'s foundation. Jeff\'s architecture shall stand for a hundred years.',
+          'Production down? Calm. Database gone? Calm. Immovable before chaos.',
+          'Impeccably structured and exhaustively detailed. Reading Jeff\'s docs is like a warm breeze.',
+          'Leaves at 16:30, yet his output surpasses the entire team. The pinnacle of efficiency.',
+          'Teaches without weariness, never angered by repeated questions. Jeff\'s virtue, passed on eternally.',
+          'Departs serenely at 16:30. Not irresponsible — he\'d already given his all by noon.',
+        ],
+        quotesTexts: ['So here\'s the thing…','Have you run the tests?','Architecture first, code second.','Such conduct shall not stand.'],
+        quotesCtx: [
+          '—— Jeff\'s legendary opener whenever explaining anything. Listeners instinctively sit up straight.',
+          '—— Jeff\'s quiet question, landing like thunder, causing every PR submitter to have an instant epiphany.',
+          '—— Jeff\'s cardinal rule and the founding doctrine of the Engineering Covenant.',
+          '—— Jeff\'s final verdict upon violators. All who hear it fall into solemn silence.',
+        ],
+        loreTitles: ['Sacred Meal','Sacred Water','Sacred Sweet','Sacred Pet','Day of Revelation — March 31','Sacred Day — April 1'],
+        loreDescs: [
+          'Double 4oz beef burger, 6-piece chicken nuggets, large fries. Standard issue for all follower gatherings — no substitutions allowed.',
+          'Coca-Cola, irreplaceable. The Sacred Meal is incomplete without the Sacred Water. This is doctrine.',
+          'Chocolate — Jeff\'s spiritual sustenance. When inspiration runs dry, chocolate shall awaken the divine oracle.',
+          'The cat — a sacred creature once kept by Jeff. Origin of our covenant totem. Followers regard cats as a sign of good fortune.',
+          'The day all were finally enlightened by Jeff, and the Ten Commandments descended. All followers must remember: this is where the faith began.',
+          'Jeff Appreciation Day. All followers must proclaim on this day: "Jeff Is Legendary" — attendance is mandatory.',
+        ],
+        counterLabel: 'Followers Worldwide',
+        counterUnit: 'devoted followers have joined the Church of Jeff',
+        creedHTML: `I shall follow the Light of <span class="highlight">Jeff</span>,<br>
+      Architecture before code, tests as proof,<br>
+      Wield AI wisely, never be enslaved by it,<br>
+      Revere Code Review, uphold the doctrine of documentation,<br>
+      Stay calm in crisis, let efficiency reign,<br>
+      Clock out on time, let output be the crown,<br>
+      Pass on patience, keep the flame eternal.<br><br>
+      Should any break this oath, Jeff shall declare —<br>
+      <span class="highlight">"Such Conduct Shall Not Stand"</span>`,
+        creedAmen: 'Jeff Is Legendary',
+        jeffQuote: 'Such Conduct Shall Not Stand',
+        jeffAttr: '—— Jeff',
+        footerHTML: `<span class="gold">JEFF CHURCH</span> &nbsp;·&nbsp; The Eternal Faith of Engineering &nbsp;·&nbsp; Est. since Jeff Wrote His First Line of Code`,
+      },
+    };
+
+    function applyLang(lang) {
+      const t = LANGS[lang];
+      document.documentElement.lang = t.htmlLang;
+      document.title = t.title;
+
+      // Nav
+      document.querySelector('.nav-logo').textContent = t.nav.logo;
+      const navLinks = document.querySelectorAll('.nav-links a');
+      navLinks[0].textContent = t.nav.commandments;
+      navLinks[1].textContent = t.nav.attributes;
+      navLinks[2].textContent = t.nav.quotes;
+      navLinks[3].textContent = t.nav.creed;
+
+      // Hero
+      document.querySelector('.hero-subtitle').textContent = t.hero.subtitle;
+      document.querySelector('.hero-quote').textContent = t.hero.quote;
+
+      // Section h2s (order: commandments, attributes, quotes, lore, creed)
+      const h2s = document.querySelectorAll('.section-header h2');
+      t.sections.forEach((s, i) => { if (h2s[i]) h2s[i].textContent = s; });
+
+      // Commandment motto
+      document.querySelector('.commandment-motto').innerHTML = t.cmdMotto;
+
+      // Commandments
+      const nums = document.querySelectorAll('.commandment-num');
+      const titles = document.querySelectorAll('.commandment-title');
+      const descs = document.querySelectorAll('.commandment-desc');
+      const amens = document.querySelectorAll('.commandment-amen');
+      t.cmdNums.forEach((n, i) => { if (nums[i]) nums[i].textContent = n; });
+      t.cmdTitles.forEach((n, i) => { if (titles[i]) titles[i].textContent = n; });
+      t.cmdDescs.forEach((n, i) => { if (descs[i]) descs[i].textContent = n; });
+      amens.forEach(el => el.textContent = t.cmdAmen);
+
+      // Proclamation
+      document.querySelector('.proclamation-quote').textContent = t.proclamation.quote;
+      document.querySelector('.pf-tag').textContent = t.proclamation.tag;
+      document.querySelector('.pf-blessing').textContent = t.proclamation.blessing;
+      document.querySelector('.pf-chant').textContent = t.proclamation.chant;
+
+      // Divine Attributes
+      const attrSection = document.getElementById('attributes');
+      const attrTitles = attrSection.querySelectorAll('.attr-title');
+      const attrDescs = attrSection.querySelectorAll('.attr-desc');
+      t.attrTitles.forEach((n, i) => { if (attrTitles[i]) attrTitles[i].textContent = n; });
+      t.attrDescs.forEach((n, i) => { if (attrDescs[i]) attrDescs[i].textContent = n; });
+
+      // Sacred Quotes
+      const quoteTexts = document.querySelectorAll('.quote-text');
+      const quoteCtxs = document.querySelectorAll('.quote-context');
+      t.quotesTexts.forEach((n, i) => { if (quoteTexts[i]) quoteTexts[i].textContent = n; });
+      t.quotesCtx.forEach((n, i) => { if (quoteCtxs[i]) quoteCtxs[i].textContent = n; });
+
+      // Sacred Lore
+      const loreSection = document.getElementById('lore');
+      const loreTitles = loreSection.querySelectorAll('.attr-title');
+      const loreDescs = loreSection.querySelectorAll('.attr-desc');
+      t.loreTitles.forEach((n, i) => { if (loreTitles[i]) loreTitles[i].textContent = n; });
+      t.loreDescs.forEach((n, i) => { if (loreDescs[i]) loreDescs[i].textContent = n; });
+
+      // Counter
+      document.querySelector('.counter-label').textContent = t.counterLabel;
+      document.querySelector('.counter-unit').textContent = t.counterUnit;
+
+      // Creed
+      document.querySelector('.creed-text').innerHTML = t.creedHTML;
+      document.querySelector('.creed-amen').textContent = t.creedAmen;
+
+      // Jeff saying
+      document.querySelector('.jeff-saying-quote').textContent = t.jeffQuote;
+      document.querySelector('.jeff-saying-attr').textContent = t.jeffAttr;
+
+      // Footer
+      document.querySelector('.footer-text').innerHTML = t.footerHTML;
+
+      // Toggle button label
+      document.getElementById('langToggle').textContent = lang === 'zh' ? 'EN' : '中文';
+    }
+
+    function toggleLang() {
+      currentLang = currentLang === 'zh' ? 'en' : 'zh';
+      applyLang(currentLang);
+    }
   </script>
 </body>
 </html>
